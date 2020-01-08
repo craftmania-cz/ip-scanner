@@ -124,7 +124,7 @@
   const displayIP = (ipAddress) => {
     eleID("ipAddressContainer").style.animationIterationCount = "1";
     eleID("ipAddressContainer").style.animationName = "none"; // Fkin iOS
-    eleID("caption").innerHTML = "YOUR IP ADDRESS";
+    eleID("caption").innerHTML = "TVOJE IP ADRESA";
     eleID("ipAddress").innerHTML = ipAddress;
     
     flicker(eleID("caption"), 350, 0);
@@ -242,7 +242,7 @@
   }
   
   const refreshCopyButton = () => {
-    eleID("copyButton").innerHTML = "COPY";
+    eleID("copyButton").innerHTML = "OKOPÍROVAT";
     eleID("copyButton").style.backgroundColor = "transparent";
     eleID("copyButton").style.color = "#FFF";
   }
