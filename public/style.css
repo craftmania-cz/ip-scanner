@@ -1,5 +1,3 @@
-/* Default style - STARTS */
-
 html {
   background-color: #222222;
   box-sizing: border-box;
@@ -27,7 +25,6 @@ a {
   font-family: 'BenderBold';
   src: url('Bender-Bold.otf'); /* IE9 Compat Modes */
 }
-/* Default style - ENDS */
 
 
 #fullScreenContainer {

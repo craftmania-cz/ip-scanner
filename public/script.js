@@ -1,16 +1,8 @@
 (function () {
-  
-  /** GLOBAL VARIABLES - STARTS */
 
-  /* globals google */
-  /* globals snazzyMapStyle */
-  /* globals ClipboardJS */
-  
-  // Move these to .env files before production
   const ipAddressApiUrl = 'https://bmh54xvwva.execute-api.us-east-1.amazonaws.com/dev/getIpInfo';
   const GoogleMapsApiKey = 'AIzaSyBigJ9i7TIM7LVxdWISL7cBGOkBWQ4MC4s';
   
-  // Animation controls (in milliseconds)
   const initialMapRevealDelay = 2000;
   const gridDominoesAnimDelay = 0.075;
   const domionesFallRate = 100;
@@ -33,13 +25,7 @@
   const plusSymbolsInGrid = [];
   let refreshCopyButtonTimeout = null;
   
-
-  /** GLOBAL VARIABLES - ENDS */
-
-
-  /** GENERIC HELPER FUNCTIONS - STARTS */
-  
-  const random = (min,max) => Math.floor(Math.random() * (max - min) + min); // random number generator
+  const random = (min,max) => Math.floor(Math.random() * (max - min) + min);
   
   function eleID (id) { return document.getElementById(id) }
   
@@ -62,9 +48,7 @@
     xmlHttp.send(null);
   }
 
-  /** GENERIC HELPER FUNCTIONS - ENDS */
-
-  // Flicker Animation for given DOM element
+  // Flicker Animation
   const flicker = (domElement, duration, delay) => {
     duration = duration ? duration: 250;
     delay = delay ? delay: 0;
@@ -75,16 +59,13 @@
     domElement.style.animationFillMode = "forwards";
   }
 
-  // setFullScreenHeight for the web app. NO more scrolling.
   const setFullScreenHeight = () => {
       const { clientHeight } = window.document.documentElement;
       eleID("fullScreenContainer").style.height = `${clientHeight}px`;
-      // console.log(`Client Hieght: ${clientHeight}`);
   }
   
-  // Render Google map on given DOM element
   const initializeMap = (mapDomElementID, Latitude, Longitude, city, country) => {
-  // For more options see: https://developers.google.com/maps/documentation/javascript/reference#MapOptions
+  // https://developers.google.com/maps/documentation/javascript/reference#MapOptions
     const defaultZoomLevel = 14, indiaMapZoomLevel = 12;
     const mapOptions = {
       zoom: country == "India" ? indiaMapZoomLevel : defaultZoomLevel,
@@ -100,7 +81,6 @@
     const map = new google.maps.Map(eleID(mapDomElementID), mapOptions);
     eleID(mapDomElementID).removeAttribute('tabindex');
     google.maps.event.addListenerOnce(map, 'tilesloaded', function(){
-      //console.log('Map loaded, now reveal map');
       revealMap(city, country);
     });
   }
@@ -115,15 +95,9 @@
     }
   }
   
-  
-  const displayAboutUs = () => {
-    flicker(eleID("AboutUs"), 350, mapRevealAnimationDelay + aboutUsRevealDelay);
-  }
-  
-  // Display IP address AND copy button
   const displayIP = (ipAddress) => {
     eleID("ipAddressContainer").style.animationIterationCount = "1";
-    eleID("ipAddressContainer").style.animationName = "none"; // Fkin iOS
+    eleID("ipAddressContainer").style.animationName = "none"; // Huh iOS
     eleID("caption").innerHTML = "TVOJE IP ADRESA";
     eleID("ipAddress").innerHTML = ipAddress;
     
@@ -132,7 +106,7 @@
     setTimeout(()=>{flicker(eleID("copyButton", 350, 0))}, copyButtonRevealDelay);
   }
   
-  // Display Location after rendering map
+  // Lokace za mapou
   const displayLocation = (city, country) => {
     if(city && country && country === city && country.length <40)
     {
@@ -158,9 +132,7 @@
     displayPHBadge();
   }
 
-  // Display IP address and Render map location
   const renderAPIresult = (ApiResponse) => {
-    // API response is 200
     if(ApiResponse.response && ApiResponse.status === 'success') //&& ApiResponse.geobytesipaddress) 
     {
       const response = ApiResponse.response;
@@ -173,10 +145,10 @@
         long
       } = response;
       
-      // show IP
+      // IP
       displayIP(ip);
-      
-      // Render Google map's location based on the API response 
+
+      // Zobrazení mapy
       initializeMap(
         "map",
         parseFloat(lat),
@@ -185,7 +157,6 @@
         country
       );
     }
-    // UI error handler
     else{
       displayPlusymbols();
       eleID("caption").className = "captionError";
@@ -212,7 +183,7 @@
   }
   
   const revealMap = (city, country) => {
-    if(country !== "South Korea") //  Snazzy map doensn't work for South Korea
+    if(country !== "South Korea") //  Jižní Korea má smůlu
     {
       displayPlusymbols();
       let delay = 0.5;
@@ -225,9 +196,7 @@
         delay += gridDominoesAnimDelay;
       }
     }
-    // showLocation
     displayLocation(city, country);
-      
   }
   
   const flashIpAddress = () => {
@@ -247,19 +216,14 @@
     eleID("copyButton").style.color = "#FFF";
   }
 
-  
-  // INITIAL TRIGGER ON LOAD
   const triggerOnLoad = () => {
-    // 1. Set Full screen height for the parent container - No scrolling allowed
+    // 1. Set Full screen
     setFullScreenHeight();
-    // 2. Get IP address and location from API
+    // 2. GET IP
     httpGetAsync(ipAddressApiUrl, renderAPIresult);
-    // 3. Draw grid
+    // 3. Grid
     drawGrid("gridOverlayContainer");
   }
-  
-  
-  /** EVENT LISTENERS - STARTS */
 
   window.onload = triggerOnLoad;
   window.onresize = function(){ location.reload(); }
@@ -268,24 +232,13 @@
   
   const clipboard = new ClipboardJS('#copyButton');
   clipboard.on('success', function(e) {
-    // console.info('Action:', e.action);
-    // console.info('Text:', e.text);
-    // console.info('Trigger:', e.trigger);
     eleID("copyButton").innerHTML = "OKOPÍROVÁNO";
     eleID("copyButton").style.backgroundColor = "white";
     eleID("copyButton").style.color = "#333333"
     e.clearSelection();
   });
 
-  clipboard.on('error', function(e) {
-    // console.error('Action:', e.action);
-    // console.error('Trigger:', e.trigger);
-  });
-  
-  /** EVENT LISTENERS - ENDS */
-  
-  
-  
+  clipboard.on('error', function(e) {});
 })();
 
 
