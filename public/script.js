@@ -120,10 +120,6 @@
     flicker(eleID("AboutUs"), 350, mapRevealAnimationDelay + aboutUsRevealDelay);
   }
   
-  const displayPHBadge = () => {
-    flicker(eleID("productHuntBadge"), 350, mapRevealAnimationDelay + aboutUsRevealDelay + badgeRevealDelay);
-  }
-  
   // Display IP address AND copy button
   const displayIP = (ipAddress) => {
     eleID("ipAddressContainer").style.animationIterationCount = "1";
@@ -275,7 +271,7 @@
     // console.info('Action:', e.action);
     // console.info('Text:', e.text);
     // console.info('Trigger:', e.trigger);
-    eleID("copyButton").innerHTML = "COPIED";
+    eleID("copyButton").innerHTML = "OKOPÍROVÁNO";
     eleID("copyButton").style.backgroundColor = "white";
     eleID("copyButton").style.color = "#333333"
     e.clearSelection();
