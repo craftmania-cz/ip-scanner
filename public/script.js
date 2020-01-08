@@ -7,8 +7,8 @@
   /* globals ClipboardJS */
   
   // Move these to .env files before production
-  const ipAddressApiUrl = '';
-  const GoogleMapsApiKey = '';
+  const ipAddressApiUrl = 'https://bmh54xvwva.execute-api.us-east-1.amazonaws.com/dev/getIpInfo';
+  const GoogleMapsApiKey = 'AIzaSyBigJ9i7TIM7LVxdWISL7cBGOkBWQ4MC4s';
   
   // Animation controls (in milliseconds)
   const initialMapRevealDelay = 2000;
