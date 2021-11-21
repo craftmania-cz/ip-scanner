@@ -253,6 +253,12 @@ a {
   .gridCell {
     padding: 2rem;
   }
+
+  #info-city {
+    position: absolute;
+    bottom: 0px;
+    margin: 15px;
+  }
 }
 
 
@@ -278,6 +284,12 @@ a {
   .gridCell {
     padding: 2.8rem;
   }
+
+  #info-city {
+    position: absolute;
+    bottom: 0px;
+    margin: 15px;
+  }
   
 }
 
@@ -302,6 +314,12 @@ a {
   
   .gridCell {
     padding: 3.5rem;
+  }
+
+  #info-city {
+    position: absolute;
+    bottom: 0px;
+    margin: 15px;
   }
   
 }

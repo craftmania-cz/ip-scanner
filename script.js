@@ -1,7 +1,6 @@
 (function () {
 
-  const ipAddressApiUrl = 'https://bmh54xvwva.execute-api.us-east-1.amazonaws.com/dev/getIpInfo';
-  const GoogleMapsApiKey = 'AIzaSyBigJ9i7TIM7LVxdWISL7cBGOkBWQ4MC4s';
+  const ipAddressApiUrl = 'https://api.ip2loc.com/7W6JIBmHQk7iTbagz6iTT3TN2pVYUibT/detect';
   
   const initialMapRevealDelay = 2000;
   const gridDominoesAnimDelay = 0.075;
@@ -13,11 +12,8 @@
   const initialPlusRevealDelay = 1000;
   
   const mapRevealAnimationDelay = 3500;
-  const aboutUsRevealDelay = 0;
-  const badgeRevealDelay = 0;
   const copyButtonRevealDelay = 0;
-  
-  
+
   const flashDuration = 500;
   
   const gridCellCount = 200;
@@ -31,15 +27,14 @@
   
   const httpGetAsync = (apiURL, callback) => {
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() { 
-        // console.log(xmlHttp);
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
           if(xmlHttp.response)
             callback({response: JSON.parse(xmlHttp.responseText), status: 'success'});
           else
             callback({status: 'error'});
         }
-      else if(xmlHttp.readyState == 4 && (xmlHttp.status == 0 || xmlHttp.status == 404)){
+      else if(xmlHttp.readyState === 4 && (xmlHttp.status === 0 || xmlHttp.status === 404)){
          callback({status: 'error'});
       }
             
@@ -68,7 +63,7 @@
   // https://developers.google.com/maps/documentation/javascript/reference#MapOptions
     const defaultZoomLevel = 14, indiaMapZoomLevel = 12;
     const mapOptions = {
-      zoom: country == "India" ? indiaMapZoomLevel : defaultZoomLevel,
+      zoom: country === "India" ? indiaMapZoomLevel : defaultZoomLevel,
       center: new google.maps.LatLng(Latitude, Longitude),
       styles: snazzyMapStyle,
       disableDefaultUI: true,
@@ -128,33 +123,23 @@
       eleID("locationContainer").innerHTML = city;
       flicker(eleID("locationContainer"),350, mapRevealAnimationDelay);
     }
-    displayAboutUs();
-    displayPHBadge();
   }
 
   const renderAPIresult = (ApiResponse) => {
     if(ApiResponse.response && ApiResponse.status === 'success') //&& ApiResponse.geobytesipaddress) 
     {
       const response = ApiResponse.response;
-      //console.log(response);
-      const {
-        ip,
-        country,
-        city,
-        lat,
-        long
-      } = response;
       
       // IP
-      displayIP(ip);
+      displayIP(response.connection.ip);
 
       // Zobrazení mapy
       initializeMap(
         "map",
-        parseFloat(lat),
-        parseFloat(long),
-        city,
-        country
+        parseFloat(response.location.latitude),
+        parseFloat(response.location.longitude),
+        response.location.capital,
+        response.location.country.name
       );
     }
     else{
